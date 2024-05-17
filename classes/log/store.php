@@ -58,8 +58,14 @@ class store extends php_obj implements log_writer {
      */
     protected function is_event_ignored(event_base $event) {
         $allowguestlogging = $this->get_config('logguests', 1);
-        if ((!CLI_SCRIPT || PHPUNIT_TEST) && !$allowguestlogging && isguestuser()) {
+        if (!$allowguestlogging && isguestuser()) {
             // Always log inside CLI scripts because we do not login there.
+            return true;
+        }
+
+        // Some actions can be performed without a course context.
+        // These events are ignored.
+        if (empty($event->courseid)) {
             return true;
         }
 
@@ -156,6 +162,13 @@ class store extends php_obj implements log_writer {
      */
     protected function insert_event_entries($events) {
         global $DB;
+
+        // Check if the event should be ignored.
+        foreach ($events as $key => $event) {
+            if ($this->is_event_ignored($event)) {
+                unset($events[$key]);
+            }
+        }
 
         // If in background mode, just save them in the database.
         if ($this->get_config('backgroundmode', false)) {
