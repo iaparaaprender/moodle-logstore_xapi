@@ -163,13 +163,6 @@ class store extends php_obj implements log_writer {
     protected function insert_event_entries($events) {
         global $DB;
 
-        // Check if the event should be ignored.
-        foreach ($events as $key => $event) {
-            if ($this->is_event_ignored($event)) {
-                unset($events[$key]);
-            }
-        }
-
         // If in background mode, just save them in the database.
         if ($this->get_config('backgroundmode', false)) {
             $events = $this->convert_array_to_objects($events);
