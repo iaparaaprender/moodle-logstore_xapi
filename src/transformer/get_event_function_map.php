@@ -101,7 +101,7 @@ function get_event_function_map() {
 
     // The event list generetor disable the debug setting but not if debugusers is set.
     // The debug is disabled because deprecated events will fire warnings.
-    $cfgdebugusr = $CFG->debugusers;
+    $cfgdebugusr = isset($CFG->debugusers) ? $CFG->debugusers : '';
     $CFG->debugusers = '';
     $environmentevents = class_exists("report_eventlist_list_generator") ?
         array_keys(\report_eventlist_list_generator::get_all_events_list(false)) : array_keys($availableevents);
