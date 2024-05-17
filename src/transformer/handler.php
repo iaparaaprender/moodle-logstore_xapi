@@ -35,6 +35,15 @@ namespace src\transformer;
  */
 function handler(array $config, array $events) {
     $eventfunctionmap = get_event_function_map();
+
+    // Some actions can be performed without a course context.
+    // These events are not transformed.
+    foreach ($events as $key => $event) {
+        if (empty($event->courseid)) {
+            unset($event[$key]);
+        }
+    }
+
     $transformedevents = array_map(function ($event) use ($config, $eventfunctionmap) {
         $eventobj = (object) $event;
         try {

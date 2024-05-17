@@ -37,10 +37,9 @@ use src\transformer\utils as utils;
  */
 function course_viewed(array $config, \stdClass $event) {
     $repo = $config['repo'];
-    $user = $repo->read_record_by_id('user', $event->userid);
     $guest = $event->userid == 0;
     $userid = $guest ? 1 : $event->userid;
-+   $user = $repo->read_record_by_id('user', $userid);
+    $user = $repo->read_record_by_id('user', $userid);
 
     $course = $repo->read_record_by_id('course', $event->courseid);
     $lang = utils\get_course_lang($course);
