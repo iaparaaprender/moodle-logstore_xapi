@@ -63,12 +63,6 @@ class store extends php_obj implements log_writer {
             return true;
         }
 
-        // Some actions can be performed without a course context.
-        // These events are ignored.
-        if (empty($event->courseid)) {
-            return true;
-        }
-
         $enabledevents = explode(',', $this->get_config('routes', ''));
         $isdisabledevent = !in_array($event->eventname, $enabledevents);
         return $isdisabledevent;
@@ -162,6 +156,12 @@ class store extends php_obj implements log_writer {
      */
     protected function insert_event_entries($events) {
         global $DB;
+
+        foreach ($events as $key => $event) {
+            if (empty($event['courseid']) || $event['courseid'] == 0) {
+                $events[$key]['courseid'] = SITEID;
+            }
+        }
 
         // If in background mode, just save them in the database.
         if ($this->get_config('backgroundmode', false)) {
