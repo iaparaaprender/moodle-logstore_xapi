@@ -187,6 +187,37 @@ function create_xapi_notification_table($dbman, $tablename) {
 }
 
  /**
+  * Create the xapi_localtest table.
+  *
+  * @param object $dbman     Database manipulation object.
+  * @param string $tablename The name of the table.
+  * @return void
+  */
+  function create_xapi_localtest_table($dbman, $tablename) {
+    // Define table to be created.
+    $table = new xmldb_table($tablename);
+
+    // Adding fields to table.
+    $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+    $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+    $table->add_field('byget', XMLDB_TYPE_TEXT, null, null, null, null, null, 'timecreated');
+    $table->add_field('bypost', XMLDB_TYPE_TEXT, null, null, null, null, null, 'byget');
+    $table->add_field('bypostbody', XMLDB_TYPE_TEXT, null, null, null, null, null, 'bypost');
+    $table->add_field('byserver', XMLDB_TYPE_TEXT, null, null, null, null, null, 'bypostbody');
+
+    // Adding keys to table.
+    $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+    // Adding indexes to table.
+    $table->add_index('timecreated', XMLDB_INDEX_NOTUNIQUE, array('timecreated'));
+
+    // Conditionally launch create table.
+    if (!$dbman->table_exists($table)) {
+        $dbman->create_table($table);
+    }
+}
+
+ /**
   * Determine what needs to be done for each upgrade step.
   *
   * @param string $oldversion Prior version of plugin during an upgrade.
@@ -246,6 +277,14 @@ function xmldb_logstore_xapi_upgrade($oldversion) {
 
         // The xAPI savepoint reached.
         upgrade_plugin_savepoint(true, 2020050600, 'logstore', 'xapi');
+    }
+
+    if ($oldversion < 2022101800.01) {
+
+        create_xapi_localtest_table($dbman, "logstore_xapi_localtest");
+
+        // The xAPI savepoint reached.
+        upgrade_plugin_savepoint(true, 2022101800.01, 'logstore', 'xapi');
     }
 
     return true;

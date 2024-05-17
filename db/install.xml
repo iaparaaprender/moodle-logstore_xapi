@@ -112,5 +112,21 @@
         <INDEX NAME="timecreated" UNIQUE="false" FIELDS="timecreated"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="logstore_xapi_localtest" COMMENT="xAPI table to check service">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="byget" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="bypost" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="bypostbody" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="byserver" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="timecreated" UNIQUE="false" FIELDS="timecreated"/>
+      </INDEXES>
+    </TABLE>
   </TABLES>
 </XMLDB>

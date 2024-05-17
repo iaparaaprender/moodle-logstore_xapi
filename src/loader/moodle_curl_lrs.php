@@ -65,6 +65,14 @@ function load(array $config, array $events) {
                 'Content-Type: application/json',
             ],
         ]);
+
+        // Chech if the response is an error.
+        if (property_exists($request, 'error') && !empty($request->error)) {
+            mtrace('+++++++++++' . $request->error . '+++++++++++' . $url);
+
+            return [];
+        }
+
         $responsecode = $request->info['http_code'];
 
         if ($responsecode !== 200) {
