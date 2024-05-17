@@ -58,7 +58,7 @@ class store extends php_obj implements log_writer {
      */
     protected function is_event_ignored(event_base $event) {
         $allowguestlogging = $this->get_config('logguests', 1);
-        if (!$allowguestlogging && isguestuser()) {
+        if (!$allowguestlogging && (isguestuser() || $event->userid == 0)) {
             // Always log inside CLI scripts because we do not login there.
             return true;
         }
