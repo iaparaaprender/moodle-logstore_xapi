@@ -32,6 +32,8 @@ namespace src\transformer;
  * @return array
  */
 function get_event_function_map() {
+    global $CFG;
+
     $availableevents = [
         '\core\event\course_completed' => 'core\course_completed',
         '\core\event\course_viewed' => 'core\course_viewed',
@@ -97,8 +99,13 @@ function get_event_function_map() {
         '\totara_program\event\program_assigned' => 'totara_program\program_assigned'
     ];
 
+    // The event list generetor disable the debug setting but not if debugusers is set.
+    // The debug is disabled because deprecated events will fire warnings.
+    $cfgdebugusr = $CFG->debugusers;
+    $CFG->debugusers = '';
     $environmentevents = class_exists("report_eventlist_list_generator") ?
         array_keys(\report_eventlist_list_generator::get_all_events_list(false)) : array_keys($availableevents);
+    $CFG->debugusers = $cfgdebugusr;
 
     return array_filter($availableevents, function($k) use ($environmentevents) {
         return in_array($k, $environmentevents);
