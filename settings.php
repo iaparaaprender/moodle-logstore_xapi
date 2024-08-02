@@ -98,6 +98,11 @@ if ($hassiteconfig) {
         get_string('errornotificationtrigger', 'logstore_xapi'),
         get_string('errornotificationtrigger_desc', 'logstore_xapi'), 10, PARAM_INT));
 
+    // Set courses to include.
+    $settings->add(new admin_setting_configtext('logstore_xapi/coursesincluded',
+        get_string('coursesincluded', 'logstore_xapi'),
+        get_string('coursesincluded_desc', 'logstore_xapi'), '', PARAM_TEXT));
+
     // Cohorts.
     $settings->add(new admin_setting_heading('cohorts',
         get_string('cohorts', 'logstore_xapi'),

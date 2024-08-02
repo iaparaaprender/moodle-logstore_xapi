@@ -63,6 +63,22 @@ class store extends php_obj implements log_writer {
             return true;
         }
 
+        $coursesincluded = $this->get_config('coursesincluded', '');
+
+        if (!empty($coursesincluded)) {
+            $coursesincluded = explode(',', $coursesincluded);
+            if (empty($event->courseid)) {
+                // Is not a course event and only events in selected courses are sent.
+                return true;
+            }
+
+            // If the course is not in the list of courses to include, ignore the event.
+            if (!in_array($event->courseid, $coursesincluded)) {
+                return true;
+            }
+
+        }
+
         $enabledevents = explode(',', $this->get_config('routes', ''));
         $isdisabledevent = !in_array($event->eventname, $enabledevents);
         return $isdisabledevent;

@@ -115,6 +115,8 @@ $string['user_help'] = 'Searches the users fullname';
 $string['contextidnolongerexists'] = 'Context ID {$a} no longer exists';
 $string['count'] = 'Count';
 $string['unknownverb'] = 'Unknown verb was requested, It should be set by developer.';
+$string['coursesincluded'] = 'Courses included';
+$string['coursesincluded_desc'] = 'Comma separated courses ids. If empty, all courses are included.';
 
 // Capabilities.
 $string['xapi:viewerrorlog'] = 'View xAPI error log';
